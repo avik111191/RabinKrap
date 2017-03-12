@@ -1,0 +1,130 @@
+
+#include<stdio.h>
+#include <stdlib.h>
+char *readfile(FILE *fp);
+void printstring(char *inputString);
+char *extractPattern(char *inputString);
+char *extractText(char *inputString);
+char *Pattern;
+char *Text;
+int main()
+{
+	FILE *filePointer;
+	filePointer=fopen("input.txt","r");
+	char *inputString=readfile(filePointer);
+	printstring(inputString);
+
+	printstring(extractPattern(inputString));
+	printstring(Pattern);
+
+
+	printstring(extractText(inputString));
+	printstring(Text);
+
+
+}
+void printstring(char *inputString){
+	printf("\n");
+	int i=0;
+	//char *ch[]=inputString;
+	while((*(inputString+i))!='\0'){
+		char c=(*(inputString+i));
+		printf("%c",c);
+		i++;
+	}
+		printf("\n");
+}
+
+char *extractPattern(char *inputString){
+	int i=0;
+	int count=0;
+ 	char *pattern;
+	while((*(inputString+i))!='\n'){
+		i++;
+		count++;
+	}
+	pattern = malloc(count + 1);
+	Pattern=malloc(count+1);
+	i=0;
+	while((*(inputString+i))!='\n'){
+		pattern[i]=(*(inputString+i));
+		i++;
+	}
+	
+	pattern[count+1]='\0';
+	Pattern=pattern;
+	return pattern;
+}
+
+
+char *extractText(char *inputString){
+	int i=0;
+	int count=0;
+ 	char *text;
+	while((*(inputString+i))!='\0'){
+		i++;
+		if((*(inputString+i))=='\n'){
+		count++;
+		if(count==2)
+			break;
+		}
+	}
+	
+	int j=i+1;
+	count=0;
+	while((*(inputString+j))!='\n'||(*(inputString+j))!='\0'){
+		j++;
+		count++;
+		if((*(inputString+j))=='\n'||(*(inputString+j))=='\0'){
+			break;
+		}
+		
+	}
+
+	text = malloc(count + 1);
+	Text = malloc(count + 1);
+	j=i+1;
+	i=0;
+	while((*(inputString+j))!='\n'){
+		text[i]=(*(inputString+j));
+		j++;
+		i++;
+	}
+	
+	text[count+1]='\0';
+	Text=text;
+	return text;
+}
+
+
+
+char *readfile(FILE *fp){
+
+	 char *content;
+   	 char chr;
+   	 size_t count;
+	//char string[count+1];
+ 	fseek(fp, 0L, SEEK_END);
+    
+    	count = ftell(fp);
+   
+    	content = malloc(count + 1);
+    
+    	if (content == NULL)
+     	   return NULL;
+    
+    	rewind(fp);
+    
+    if (fread(content, 1, count, fp) != count) {
+
+        free(content);
+
+
+        return NULL;
+        }
+        
+     content[count] = '\0';
+    
+    return content;
+}
+ 
